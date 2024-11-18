@@ -9,11 +9,15 @@ import (
 
 func lengthOfLongestSubstring(s string) int {
 	length := 0
-	seen := make(map[byte]int)
+	seen := [128]int{}
+
+	for i := range seen {
+		seen[i] = -1
+	}
 
 	for l, r := 0, 0; r < len(s); r++ {
 		char := s[r]
-		if i, ok := seen[char]; ok && l <= i {
+		if i := seen[char]; i >= 0 && l <= i {
 			l = i + 1
 		}
 
