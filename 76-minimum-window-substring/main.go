@@ -14,51 +14,41 @@ func minWindow(s, t string) string {
 		return ""
 	}
 
-	// freqT := [128]int{}
-	// freqS := [128]int{}
-	freqT := make(map[rune]int)
-	freqS := make(map[rune]int)
-
+	freqT := [128]int{}
+	freqS := [128]int{}
+	numUnique := 0
 	for _, ch := range t {
+		if freqT[ch] == 0 {
+			numUnique++
+		}
 		freqT[ch]++
-		// freqT[ch]++
 	}
-
-	fmt.Println(freqT)
 
 	window := ""
 	l, r := 0, 0
 	matches := 0
 
 	for r < len(s) {
-		newChar := rune(s[r])
-		fmt.Println(newChar)
-		freqS[rune(newChar)]++
-		// freqS[newChar]++
+		newChar := s[r]
 
-		if freqS[newChar] == freqT[newChar] {
-			matches++
-		} else if freqS[newChar]-1 == freqT[newChar] {
-			matches--
+		if freqT[newChar] > 0 {
+			freqS[newChar]++
+			if freqS[newChar] == freqT[newChar] {
+				matches++
+			}
 		}
 
-		fmt.Println(matches)
-
-		for l < r && matches == len(t) {
-			fmt.Println(matches)
-			if r-l+1 < len(window) {
-				fmt.Println(s[l : r+1])
+		for matches == numUnique {
+			if r-l+1 < len(window) || len(window) == 0 {
 				window = s[l : r+1]
 			}
 			oldChar := rune(s[l])
-			if freqS[oldChar] > 0 {
-				freqT[oldChar]--
-			}
 
-			if freqS[oldChar] == freqT[oldChar] {
-				matches++
-			} else if freqS[oldChar]+1 == freqT[oldChar] {
-				matches--
+			if freqT[oldChar] > 0 {
+				freqS[oldChar]--
+				if freqS[oldChar]+1 == freqT[oldChar] {
+					matches--
+				}
 			}
 			l++
 		}
@@ -77,8 +67,9 @@ func main() {
 	}
 	tests := []test{
 		{s1: "ADOBECODEBANC", s2: "ABC", out: "BANC"},
-		// {s1: "a", s2: "a", out: "a"},
-		// {s1: "a", s2: "aa", out: ""},
+		{s1: "a", s2: "a", out: "a"},
+		{s1: "a", s2: "aa", out: ""},
+		{s1: "aa", s2: "aa", out: "aa"},
 	}
 	for i, t := range tests {
 		res := minWindow(t.s1, t.s2)
