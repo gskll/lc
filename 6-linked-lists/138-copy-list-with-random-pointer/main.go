@@ -30,6 +30,10 @@ type Node struct {
 	Random *Node
 }
 
+// interweaving nodes
+// more performant but less clear code
+// O(n) time, and O(1) space
+// will be more performant despite three runs through the list as we're just using sequential memory access, no hash computation, memory lookup and allocation etc which we need for the map
 func copyRandomList(head *Node) *Node {
 	if head == nil {
 		return nil
@@ -66,6 +70,8 @@ func copyRandomList(head *Node) *Node {
 }
 
 // using single pass hash map to store copied nodes
+// clearer code, only one pass through the list
+// but O(n) space (O(n) time)
 // func copyRandomList(head *Node) *Node {
 // 	nodes := make(map[*Node]*Node)
 //
