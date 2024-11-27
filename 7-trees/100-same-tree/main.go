@@ -62,6 +62,11 @@ func main() {
 			q:   "[1,1,2]",
 			out: true,
 		},
+		{
+			p:   "[1,null,1,null,1,null,1,null,1,null,1,2]",
+			q:   "[1,null,1,null,1,null,1,null,1,null,1,2]",
+			out: true,
+		},
 	}
 	for _, test := range tests {
 		t := TreeFromLeetCode(test.p)
