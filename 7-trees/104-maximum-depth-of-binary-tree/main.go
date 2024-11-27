@@ -26,6 +26,30 @@ type NodeDepth struct {
 	Depth int
 }
 
+// The recursive solution is optimal because:
+//
+// Time Complexity: O(n) - visits each node exactly once
+// Space Complexity: O(h) where h is the height of the tree
+//
+// In a balanced tree, this is O(log n)
+// In worst case (linear tree), this is O(n)
+//
+//
+// Code Clarity: Very clear intent and easy to understand
+// Naturally follows the problem's recursive nature
+//
+// The iterative solution you showed earlier is good for situations where:
+//
+// You're dealing with extremely deep trees that might cause stack overflow
+// You need explicit stack control
+// You need to track additional state during traversal
+//
+// But for typical BSTs, the recursive solution is preferred because:
+//
+// Modern compilers optimize tail recursion well
+// The call stack overhead is negligible for most tree sizes
+// The code is more maintainable and less prone to errors
+
 func maxDepth(root *TreeNode) int {
 	if root == nil {
 		return 0
