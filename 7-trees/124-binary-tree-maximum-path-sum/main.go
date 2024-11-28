@@ -24,6 +24,7 @@ type TreeNode struct {
 	Right *TreeNode
 }
 
+// O(n) / O(1)
 func maxPathSum(root *TreeNode) int {
 	if root == nil {
 		return 0
