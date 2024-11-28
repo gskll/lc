@@ -25,8 +25,8 @@ type TreeNode struct {
 
 type OptimalTreeNode struct {
 	Val       int
-	Left      *TreeNode
-	Right     *TreeNode
+	Left      *OptimalTreeNode
+	Right     *OptimalTreeNode
 	LeftCount int
 }
 
@@ -87,7 +87,7 @@ func delete(root *OptimalTreeNode, val int) *OptimalTreeNode {
 	return root
 }
 
-func findMin(node *TreeNode) *TreeNode {
+func findMin(node *OptimalTreeNode) *OptimalTreeNode {
 	curr := node
 	for curr.Left != nil {
 		curr = curr.Left
