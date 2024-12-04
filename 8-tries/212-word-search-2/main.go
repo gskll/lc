@@ -21,6 +21,14 @@ import (
 // words[i] consists of lowercase English letters.
 // All the strings of words are unique.
 
+// Time Complexity: O(M * N * 4^L) where:
+// - M x N is the board size
+// - L is max word length
+//
+// Space Complexity: O(N * L) where:
+// - N is number of words
+// - L is max word length
+
 type trie struct {
 	root *trieNode
 }
@@ -34,23 +42,6 @@ type trieNode struct {
 	children   [26]*trieNode
 	isTerminal bool
 	count      int
-}
-
-type path struct {
-	chars   []byte
-	visited map[[2]int]bool
-}
-
-func (p *path) visit(row, col int) {
-	p.visited[[2]int{row, col}] = true
-}
-
-func (p *path) unvisit(row, col int) {
-	p.visited[[2]int{row, col}] = false
-}
-
-func (p *path) isVisited(row, col int) bool {
-	return p.visited[[2]int{row, col}]
 }
 
 func (t *trie) insert(word string) {
@@ -83,45 +74,41 @@ func findWords(board [][]byte, words []string) []string {
 	}
 
 	m, n := len(board), len(board[0])
+	path := make([]byte, 0, 10)
 
 	var res []string
-	var dfs func(path path, row, col int, node *trieNode)
-	dfs = func(path path, row, col int, node *trieNode) {
-		if len(res) == len(words) || node == nil || node.count == 0 {
+	var dfs func(path []byte, row, col int, node *trieNode)
+	dfs = func(path []byte, row, col int, node *trieNode) {
+		if len(res) == len(words) {
 			return
 		}
-		// fmt.Println(row, col, path.visited, string(path.chars), fmt.Sprintf("<%p - %s - %t", node, node.val, node.isTerminal))
 
-		if node.isTerminal {
-			// fmt.Println("path found:", string(path))
-			res = append(res, string(path.chars))
-			trie.markFound(string(path.chars))
+		if row < 0 || col < 0 || row >= m || col >= n || board[row][col] == '#' {
+			return
 		}
 
-		path.visit(row, col)
+		char := board[row][col]
+		childNode := node.children[char-'a']
 
-		directions := [4][2]int{{+1, 0}, {0, +1}, {-1, 0}, {0, -1}}
-
-		for _, direction := range directions {
-			newRow, newCol := row+direction[0], col+direction[1]
-
-			if path.isVisited(newRow, newCol) || newRow < 0 || newCol < 0 || newRow >= m || newCol >= n {
-				continue
-			}
-
-			cell := board[newRow][newCol]
-			childNode := node.children[cell-'a']
-
-			if childNode == nil || childNode.count == 0 {
-				continue
-			}
-
-			path.chars = append(path.chars, cell)
-			dfs(path, newRow, newCol, childNode)
-			path.chars = path.chars[:len(path.chars)-1]
+		if childNode == nil || childNode.count == 0 {
+			return
 		}
 
-		path.unvisit(row, col)
+		board[row][col] = '#'
+		path = append(path, char)
+
+		if childNode.isTerminal {
+			res = append(res, string(path))
+			trie.markFound(string(path))
+		}
+
+		dfs(path, row+1, col, childNode)
+		dfs(path, row-1, col, childNode)
+		dfs(path, row, col+1, childNode)
+		dfs(path, row, col-1, childNode)
+
+		path = path[:len(path)-1]
+		board[row][col] = char
 	}
 
 	for i := range board {
@@ -129,12 +116,8 @@ func findWords(board [][]byte, words []string) []string {
 			if len(res) == len(words) {
 				return res
 			}
-			startChar := board[i][j]
-			path := path{
-				chars:   []byte{startChar},
-				visited: map[[2]int]bool{},
-			}
-			dfs(path, i, j, trie.root.children[startChar-'a'])
+			path = path[:0]
+			dfs(path, i, j, trie.root)
 		}
 	}
 	return res
