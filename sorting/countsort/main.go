@@ -25,9 +25,9 @@ import "fmt"
 
 // Time: O(n + k) where k is range (max-min+1)
 // Space: O(k) for count array
-func countsortBasic(arr []int) []int {
+func countsortBasic(arr []int) {
 	if len(arr) == 0 {
-		return nil
+		return
 	}
 
 	// Find range
@@ -58,15 +58,13 @@ func countsortBasic(arr []int) []int {
 			index++
 		}
 	}
-
-	return arr
 }
 
 // Time: O(n + k)
 // Space: O(n + k) for output array and count array
-func countsortStable(arr []int) []int {
+func countsortStable(arr []int) {
 	if len(arr) == 0 {
-		return nil
+		return
 	}
 
 	// find range
@@ -102,20 +100,20 @@ func countsortStable(arr []int) []int {
 		count[arr[i]-smallest]--
 	}
 
-	return output
+	copy(arr, output)
 }
 
 func main() {
 	fmt.Println("basic")
 	arr := []int{3, 6, 4, 1, 0, 8, 5, 2, 9, 7}
 	fmt.Println(arr)
-	sorted := countsortBasic(arr)
-	fmt.Println(sorted)
+	countsortBasic(arr)
+	fmt.Println(arr)
 
 	fmt.Println()
 	fmt.Println("stable")
 	arr2 := []int{4, 2, 2, 8, 3, 3, 1}
 	fmt.Println(arr2)
-	sorted2 := countsortStable(arr2)
-	fmt.Println(sorted2)
+	countsortStable(arr2)
+	fmt.Println(arr2)
 }
