@@ -139,9 +139,27 @@ func quicksortLomuto(arr []int, low, high int) {
 
 func partitionHoareRandom(arr []int, low, high int) int {
 	pivotIdx := low + rand.Intn(high-low+1)
-	arr[pivotIdx], arr[low] = arr[low], arr[pivotIdx]
+	arr[low], arr[pivotIdx] = arr[pivotIdx], arr[low]
+	// return partitionHoare(arr, low, high)
 
-	return partitionHoare(arr, low, high)
+	pivot := arr[low]
+	i, j := low, high
+
+	for {
+		for arr[i] < pivot {
+			i++
+		}
+
+		for arr[j] > pivot {
+			j--
+		}
+
+		if i >= j {
+			return j
+		}
+
+		arr[i], arr[j] = arr[j], arr[i]
+	}
 }
 
 func quicksortHoareRandom(arr []int, low, high int) {
