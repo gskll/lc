@@ -9,6 +9,9 @@ import (
 // Time complexity: O(n) on average. We handle n+n/2+n/4...=2n
 // Memory complexity: O(1) (excluding initial array copy if we want to preserve input)
 
+// Lomuto partition: guarantees pivot is in correct place in array - easier implementation
+// Hoare partition: only guarantees elements on either side of pivot are smaller/larger but not that pivot is in final place
+
 func kthLargest(arr []int, k int) int {
 	temp := make([]int, len(arr))
 	copy(temp, arr)
