@@ -21,7 +21,7 @@ import (
 // - sorted arrays, all elements are duplicates, pattern based arrays (repeating sequences), intentionally malicious input if someone knows your pivot
 
 // - key is how to choose the pivot - lots of ways
-// - lomuto - basic
+// - lomuto - basic - guarantees pivot is in correct place after partition
 // - hoare partitioning - generally good performance - 3x less swaps than lomuto
 // - 3 way partitioning - if lots of duplicates
 //
