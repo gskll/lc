@@ -18,6 +18,7 @@ import "fmt"
 
 // for k largest elements we can stop after k iteration of extracting
 // for k smallest elements we use a min heap
+// but in practice usually better to maintain a minheap of size k for k largest elements
 func heapsort(arr []int) {
 	n := len(arr)
 
