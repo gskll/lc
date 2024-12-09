@@ -18,6 +18,8 @@ import (
 // 1 <= word.length <= 15
 // board and word consists of only lowercase and uppercase English letters.
 
+// O(m*n*l^4) m =rows, n=cols, l=word length
+// O(1)
 func exist(board [][]byte, word string) bool {
 	// check if all characters in word exist in board
 	var count [128]int
@@ -40,43 +42,41 @@ func exist(board [][]byte, word string) bool {
 	}
 
 	n := len(word)
-	exists := false
 
-	var dfs func(row, col, i int)
-	dfs = func(row, col, i int) {
+	var dfs func(row, col, i int) bool
+	dfs = func(row, col, i int) bool {
 		if i == n {
-			exists = true
-			return
+			return true
 		}
 
-		if exists || row < 0 || col < 0 || row >= rows || col >= cols {
-			return
+		if row < 0 || col < 0 || row >= rows || col >= cols {
+			return false
 		}
 
 		char := board[row][col]
 		if char == '#' || char != word[i] {
-			return
+			return false
 		}
 
 		board[row][col] = '#'
 
-		dfs(row+1, col, i+1)
-		dfs(row-1, col, i+1)
-		dfs(row, col+1, i+1)
-		dfs(row, col-1, i+1)
+		res := dfs(row+1, col, i+1) || dfs(row-1, col, i+1) || dfs(row, col+1, i+1) || dfs(row, col-1, i+1)
 
 		board[row][col] = char
+		return res
 	}
 
-	for r := 0; r < rows && !exists; r++ {
-		for c := 0; c < cols && !exists; c++ {
+	for r := 0; r < rows; r++ {
+		for c := 0; c < cols; c++ {
 			if board[r][c] == word[0] {
-				dfs(r, c, 0)
+				if res := dfs(r, c, 0); res {
+					return res
+				}
 			}
 		}
 	}
 
-	return exists
+	return false
 }
 
 func main() {
