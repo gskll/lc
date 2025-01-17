@@ -2,6 +2,13 @@ package main
 
 import "fmt"
 
+// https://leetcode.com/problems/largest-rectangle-in-histogram/description/
+
+// Given an array of integers heights representing the histogram's bar height where the width of each bar is 1, return the area of the largest rectangle in the histogram.
+//
+// 1 <= heights.length <= 10^5
+// 0 <= heights[i] <= 10^4
+
 // for each bar we want to consider how far left/right it can go
 // a bar can only not extend left/right if it reaches a bar that is smaller
 // can use a stack, pop when we reach a smaller element
